@@ -473,7 +473,7 @@ WARNING: Servos can draw a considerable amount of current. Make sure your system
 #define FEATURE_CHECKSUM_FORCED 0
 #define FEATURE_FAN_CONTROL 1
 #define FEATURE_FAN2_CONTROL 1
-#define FEATURE_CONTROLLER 11
+#define FEATURE_CONTROLLER 13
 #define ADC_KEYPAD_PIN -1
 #define LANGUAGE_EN_ACTIVE 1
 #define LANGUAGE_DE_ACTIVE 0
