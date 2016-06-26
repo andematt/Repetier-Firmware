@@ -467,6 +467,23 @@ inline void memcopy4(void *dest,void *source) {
 #define EXT5_ANALOG_CHANNEL
 #endif
 
+
+/**********************************************************************************************/
+//ADD BY Hally for ADC keypad
+#if HAVE_ADC_KEYPAD == true
+#define KEYPAD_ANALOG_INPUTS 1
+#define KEYPAD_ANALOG_INDEX EXT0_ANALOG_INPUTS+EXT1_ANALOG_INPUTS+EXT2_ANALOG_INPUTS+EXT3_ANALOG_INPUTS+EXT4_ANALOG_INPUTS+EXT5_ANALOG_INPUTS
+#define KEYPAD_ANALOG_CHANNEL ACCOMMA5 ADC_KEYPAD_PIN
+#define ACCOMMA6 ,
+#else
+#define ACCOMMA6 ACCOMMA5
+#define KEYPAD_ANALOG_INPUTS 0
+#define KEYPAD_ANALOG_INDEX 
+#define KEYPAD_ANALOG_CHANNEL
+#endif
+/**********************************************************************************************/
+
+
 #if HAVE_HEATED_BED && HEATED_BED_SENSOR_TYPE < 101
 #define BED_ANALOG_INPUTS 1
 #define BED_SENSOR_INDEX EXT0_ANALOG_INPUTS+EXT1_ANALOG_INPUTS+EXT2_ANALOG_INPUTS+EXT3_ANALOG_INPUTS+EXT4_ANALOG_INPUTS+EXT5_ANALOG_INPUTS

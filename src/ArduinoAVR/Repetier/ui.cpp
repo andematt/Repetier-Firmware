@@ -3623,6 +3623,64 @@ void UIDisplay::mediumAction()
 #endif
 }
 
+#if HAVE_ADC_KEYPAD==true
+#define ADC_KEY_NUM     8
+#define DEBUG_ADC_EKY   false//true
+typedef struct
+{
+    uint16_t ADCKeyValueMin;
+    uint16_t ADCKeyValueMax;
+    uint8_t  ADCKeyNo;
+}_stADCKeypadTable_;
+_stADCKeypadTable_ stADCKeyTable[ADC_KEY_NUM] = 
+{
+    //VALUE_MIN, VALUE_MAX , KEY        
+    {4000,4096, 0},     //F1
+    {4000,4096, 0},     //F2
+    {4000,4096, 0},     //F3
+    {300,500,   ADCKEY_LEFT},       //LEFT
+    {1900,2200, ADCKEY_RIGHT},      //RIGHT
+    {570,870,   ADCKEY_UP},         //UP
+    {2670,2870, ADCKEY_DOWN},       //DOWN
+    {1150,1450, ADCKEY_ENTER},      //ENTER
+};
+
+uint8_t ui_check_ADC_keys(void) 
+{
+    uint16_t currentkpADCValue;
+    uint8_t ADCKeyNo;
+    
+    currentkpADCValue = osAnalogInputValues[KEYPAD_ANALOG_INDEX]>>(ANALOG_REDUCE_BITS);
+    #if DEBUG_ADC_EKY == true
+    Com::printFLN(PSTR("+++++++++++++++++++++++++++++++++++"));
+    uint8_t i;
+    for(i=0; i<ANALOG_INPUTS; i++)
+    {           
+        Com::printFLN(PSTR("ANALOG_CHANNEL = "), i);        
+        Com::printFLN(PSTR("osAnalogInputValues = "), (int)osAnalogInputValues[i]);
+    }       
+    Com::printFLN(PSTR("KEYPAD_ANALOG_INDEX = "), KEYPAD_ANALOG_INDEX);
+    Com::printFLN(PSTR("currentkpADCValue = "), (int)currentkpADCValue);    
+    #endif
+    if(currentkpADCValue < 4000)
+    {   
+        for(int8_t i=0; i<ADC_KEY_NUM; i++)
+        {
+            if((currentkpADCValue > stADCKeyTable[i].ADCKeyValueMin) && (currentkpADCValue < stADCKeyTable[i].ADCKeyValueMax))
+            {
+                ADCKeyNo = stADCKeyTable[i].ADCKeyNo;
+                #if DEBUG_ADC_EKY == true
+                Com::printFLN(PSTR("KeyNo = "), ADCKeyNo);
+                #endif
+                return ADCKeyNo;
+            }
+        }
+    }   
+}
+#endif
+
+
+
 // Gets calles from main tread
 void UIDisplay::slowAction(bool allowMoves)
 {
@@ -3664,6 +3722,47 @@ void UIDisplay::slowAction(bool allowMoves)
 #ifdef HAS_USER_KEYS        
         ui_check_Ukeys(nextAction);
 #endif
+        //HÄR?
+        //ui_check_Ukeys(nextAction);
+
+        #if HAVE_ADC_KEYPAD==true
+        uint8_t adckeyno = 0;
+        if(nextAction == 0)
+        {
+            adckeyno = ui_check_ADC_keys();         
+            if(adckeyno)
+            {   
+                switch(adckeyno)
+                {                   
+                    case ADCKEY_UP:
+                        nextAction = UI_ACTION_PREVIOUS;
+                        break;
+                    case ADCKEY_DOWN:
+                        nextAction = UI_ACTION_NEXT;
+                        break;
+                    case ADCKEY_LEFT:
+                        nextAction = UI_ACTION_BACK;
+                        break;
+                    case ADCKEY_RIGHT:  
+                        if(menuLevel != 0)
+                            nextAction = UI_ACTION_OK;
+                        else
+                            nextAction = 0;
+                        break;
+                    case ADCKEY_ENTER:  
+                        if(menuLevel == 0)
+                            nextAction = UI_ACTION_OK;
+                        else
+                            nextAction = 0;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        #endif
+        
+        //HÄR?
         if(lastButtonAction != nextAction)
         {
             lastButtonStart = time;

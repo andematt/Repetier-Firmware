@@ -277,7 +277,7 @@
 #define UI_ACTION_WIZARD_JAM_EOF         5003
 
 // Load basic language definition to make sure all values are defined
-//#include "uilang.h"
+#include "uilang.h"
 
 #define UI_MENU_TYPE_INFO 0
 #define UI_MENU_TYPE_FILE_SELECTOR 1
@@ -1537,6 +1537,203 @@ inline void uiCheckSlowEncoder() {}
 void uiCheckSlowKeys(uint16_t &action) {}
 #endif // UI_MAIN
 #endif // Controller 15
+
+
+
+
+/****************************************************************************/
+//ADD By Hally For M803 Modified for .92.5
+#if FEATURE_CONTROLLER == 524 //Dumb-ass 2004 5button lcd
+
+#if HAVE_ADC_KEYPAD == true
+#define ADCKEY_UP     1
+#define ADCKEY_DOWN     2
+#define ADCKEY_LEFT     3
+#define ADCKEY_RIGHT    4
+#define ADCKEY_ENTER    5
+#endif
+
+#if MOTHERBOARD==701 // Megatronics v2.0
+#define UI_HAS_KEYS     1
+#define UI_HAS_BACK_KEY   0
+#define UI_DISPLAY_TYPE   1
+#define UI_DISPLAY_CHARSET  1
+#define UI_COLS       20
+#define UI_ROWS       4
+
+#define UI_DISPLAY_RS_PIN     14
+#define UI_DISPLAY_RW_PIN     -1
+#define UI_DISPLAY_ENABLE_PIN   15
+#define UI_DISPLAY_D0_PIN     -1
+#define UI_DISPLAY_D1_PIN     -1
+#define UI_DISPLAY_D2_PIN     -1
+#define UI_DISPLAY_D3_PIN     -1
+#define UI_DISPLAY_D4_PIN     30
+#define UI_DISPLAY_D5_PIN     31
+#define UI_DISPLAY_D6_PIN     32
+#define UI_DISPLAY_D7_PIN     33
+
+#if UI_HAS_KEYS
+#define UI_ENCODER_A      -1//61
+#define UI_ENCODER_B      -1//59
+#define UI_ENCODER_CLICK    -1//43
+#endif
+
+#define UI_SHIFT_OUT      -1//17
+#define UI_SHIFT_LD       -1//42
+#define UI_SHIFT_CLK      -1//63
+#elif(MOTHERBOARD == 63)
+//meliz
+#define UI_HAS_KEYS       1
+#define UI_HAS_BACK_KEY     0
+#define UI_DISPLAY_TYPE     1
+#define UI_DISPLAY_CHARSET    1
+#define UI_COLS         20
+#define UI_ROWS         4
+
+#define UI_DISPLAY_RS_PIN     28
+#define UI_DISPLAY_RW_PIN     -1
+#define UI_DISPLAY_ENABLE_PIN   29
+#define UI_DISPLAY_D0_PIN     -1
+#define UI_DISPLAY_D1_PIN     -1
+#define UI_DISPLAY_D2_PIN     -1
+#define UI_DISPLAY_D3_PIN     -1
+#define UI_DISPLAY_D4_PIN     10
+#define UI_DISPLAY_D5_PIN     11
+#define UI_DISPLAY_D6_PIN     16
+#define UI_DISPLAY_D7_PIN     17
+
+#if UI_HAS_KEYS
+#define UI_ENCODER_A      -1
+#define UI_ENCODER_B      -1
+#define UI_ENCODER_CLICK    -1
+#endif
+
+#define UI_SHIFT_OUT      -1
+#define UI_SHIFT_LD       -1
+#define UI_SHIFT_CLK      -1
+
+#else // RAMPS 1.4
+#define UI_HAS_KEYS       1
+#define UI_HAS_BACK_KEY     0
+#define UI_DISPLAY_TYPE     1
+#define UI_DISPLAY_CHARSET    1
+#define UI_COLS         20
+#define UI_ROWS         4
+
+#define UI_DISPLAY_RS_PIN     16
+#define UI_DISPLAY_RW_PIN     -1
+#define UI_DISPLAY_ENABLE_PIN   17
+#define UI_DISPLAY_D4_PIN     23
+#define UI_DISPLAY_D5_PIN     25
+#define UI_DISPLAY_D6_PIN     27
+#define UI_DISPLAY_D7_PIN     29
+
+#if UI_HAS_KEYS
+#define UI_ENCODER_A      64
+#define UI_ENCODER_B      59
+#define UI_ENCODER_CLICK    63
+#endif
+
+#define UI_SHIFT_OUT      40
+#define UI_SHIFT_LD       42
+#define UI_SHIFT_CLK      44
+#endif
+
+#define UI_DELAYPERCHAR      320
+#define UI_INVERT_MENU_DIRECTION true
+
+
+#ifdef UI_MAIN
+void uiInitKeys() { //Changed to new naming shceme
+#if UI_HAS_KEYS
+  #if((UI_ENCODER_A > 0) && (UI_ENCODER_B > 0))
+    UI_KEYS_INIT_CLICKENCODER_LOW(UI_ENCODER_A,UI_ENCODER_B);
+    UI_KEYS_INIT_BUTTON_LOW(UI_ENCODER_CLICK);
+
+    SET_OUTPUT(UI_SHIFT_CLK);
+    SET_OUTPUT(UI_SHIFT_LD);
+    SET_INPUT(UI_SHIFT_OUT);
+
+    WRITE(UI_SHIFT_OUT,HIGH);
+    WRITE(UI_SHIFT_LD,HIGH);
+  #endif
+#endif
+}
+
+void uiCheckKeys(int &action) { //changed
+#if UI_HAS_KEYS 
+  #if((UI_ENCODER_A > 0) && (UI_ENCODER_B > 0))
+    UI_KEYS_CLICKENCODER_LOW_REV(UI_ENCODER_A,UI_ENCODER_B);
+    UI_KEYS_BUTTON_LOW(UI_ENCODER_CLICK,UI_ACTION_OK);
+  #endif
+#endif
+}
+
+inline void uiCheckSlowEncoder() {} // not used
+
+void uiCheckSlowKeys(int &action) 
+{
+
+#if UI_HAS_KEYS 
+  #if((UI_SHIFT_LD > 0) && (UI_SHIFT_OUT > 0))
+    WRITE(UI_SHIFT_LD,LOW);
+    WRITE(UI_SHIFT_LD,HIGH);
+
+    for(int8_t i=1;i<=8;i++) 
+  {
+        if(!READ(UI_SHIFT_OUT)) 
+    { // pressed button = logical 0 (false)
+            switch (i) {
+                case 1: 
+          action = UI_ACTION_Z_DOWN; 
+          break; // F3
+                case 2: 
+          action = UI_ACTION_Z_UP; 
+          break; // F2
+                case 3: 
+          action = UI_ACTION_EMERGENCY_STOP; 
+          break; // F1
+                case 4: 
+          action = UI_ACTION_Y_UP; 
+          break; // UP
+                case 5: 
+          action = UI_ACTION_X_UP; 
+          break; // RIGHT
+                case 6: 
+          action = UI_ACTION_HOME_ALL; 
+          break; // MID
+                case 7: 
+          action = UI_ACTION_Y_DOWN; 
+          break; // DOWN
+                case 8: 
+          action = UI_ACTION_X_DOWN; 
+          break; // LEFT
+            }
+            i = 9; // if button detected, exit "for loop"
+        }
+        WRITE(UI_SHIFT_CLK,HIGH);
+        WRITE(UI_SHIFT_CLK,LOW);
+    } 
+  #else
+  action = 0;
+  #endif
+#endif  
+}
+#endif
+#endif // Controller 524
+
+
+
+
+
+
+
+
+
+
+
+
 
 #if FEATURE_CONTROLLER == CONTROLLER_GAMEDUINO2
 #define UI_HAS_KEYS 1
