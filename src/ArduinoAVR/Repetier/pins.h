@@ -988,6 +988,17 @@ STEPPER_CURRENT_CONTROL
 #define SDSUPPORT 1  // sd card reader on board
 #define ORIG_SDCARDDETECT -1
 
+#if 1//def HAVE_LCD
+//Zonestar UI
+#define LCD_PINS_RS 		28//A3
+#define LCD_PINS_ENABLE 	29//A2
+#define LCD_PINS_D4 		10
+#define LCD_PINS_D5 		11
+#define LCD_PINS_D6 		16
+#define LCD_PINS_D7 		17
+#define	ADC_KEYPAD_PIN		 1//D30 Analog numbering
+#endif
+
 #define E0_PINS ORIG_E0_STEP_PIN,ORIG_E0_DIR_PIN,ORIG_E0_ENABLE_PIN,
 #define E1_PINS
 
