@@ -84,7 +84,7 @@
 #define EXT0_STEPS_PER_MM 370
 #define EXT0_TEMPSENSOR_TYPE 1
 #define EXT0_TEMPSENSOR_PIN TEMP_0_PIN
-#define EXT0_HEATER_PIN HEATER_0_PIN
+#define EXT0_HEATER_PIN HEATER_2_PIN
 #define EXT0_STEP_PIN ORIG_E0_STEP_PIN
 #define EXT0_DIR_PIN ORIG_E0_DIR_PIN
 #define EXT0_INVERSE 0
@@ -98,7 +98,7 @@
 #define EXT0_MAX_FEEDRATE 50
 #define EXT0_MAX_START_FEEDRATE 20
 #define EXT0_MAX_ACCELERATION 5000
-#define EXT0_HEAT_MANAGER 3
+#define EXT0_HEAT_MANAGER 0
 #define EXT0_WATCHPERIOD 1
 #define EXT0_PID_INTEGRAL_DRIVE_MAX 230
 #define EXT0_PID_INTEGRAL_DRIVE_MIN 40
@@ -159,9 +159,9 @@
 
 // ############# Heated bed configuration ########################
 
-#define HAVE_HEATED_BED 0
+#define HAVE_HEATED_BED 1
 #define HEATED_BED_MAX_TEMP 120
-#define SKIP_M190_IF_WITHIN 3
+#define SKIP_M190_IF_WITHIN 6
 #define HEATED_BED_SENSOR_TYPE 1
 #define HEATED_BED_SENSOR_PIN TEMP_1_PIN
 #define HEATED_BED_HEATER_PIN HEATER_1_PIN
@@ -276,9 +276,9 @@ It also can add a delay to wait for spindle to run on full speed.
 #define DISABLE_Y 0
 #define DISABLE_Z 0
 #define DISABLE_E 0
-#define INVERT_X_DIR 0
-#define INVERT_Y_DIR 0
-#define INVERT_Z_DIR 0
+#define INVERT_X_DIR 1
+#define INVERT_Y_DIR 1
+#define INVERT_Z_DIR 1
 #define X_HOME_DIR -1
 #define Y_HOME_DIR -1
 #define Z_HOME_DIR -1
@@ -494,7 +494,7 @@ WARNING: Servos can draw a considerable amount of current. Make sure your system
 #define UI_AUTORETURN_TO_MENU_AFTER 30000
 #define FEATURE_UI_KEYS 0
 #define UI_ENCODER_SPEED 1
-#define UI_REVERSE_ENCODER 0
+#define UI_REVERSE_ENCODER 1
 #define UI_KEY_BOUNCETIME 10
 #define UI_KEY_FIRST_REPEAT 500
 #define UI_KEY_REDUCE_REPEAT 50
@@ -542,23 +542,23 @@ Values must be in range 1..255
     "xStepsPerMM": 80,
     "yStepsPerMM": 80,
     "zStepsPerMM": 80,
-    "xInvert": 0,
+    "xInvert": "1",
     "xInvertEnable": 0,
     "eepromMode": 2,
-    "yInvert": 0,
+    "yInvert": "1",
     "yInvertEnable": 0,
-    "zInvert": 0,
+    "zInvert": "1",
     "zInvertEnable": 0,
     "extruder": [
         {
             "id": 0,
-            "heatManager": 3,
+            "heatManager": 0,
             "pidDriveMin": 40,
             "pidDriveMax": 230,
             "pidMax": 255,
             "sensorType": 1,
             "sensorPin": "TEMP_0_PIN",
-            "heaterPin": "HEATER_0_PIN",
+            "heaterPin": "HEATER_2_PIN",
             "maxFeedrate": 50,
             "startFeedrate": 20,
             "invert": "0",
@@ -739,7 +739,7 @@ Values must be in range 1..255
     "servo2Pin": -1,
     "servo3Pin": -1,
     "featureWatchdog": "1",
-    "hasHeatedBed": "0",
+    "hasHeatedBed": "1",
     "enableZProbing": "0",
     "extrudeMaxLength": 160,
     "homeOrder": "HOME_ORDER_XYZ",
@@ -752,7 +752,7 @@ Values must be in range 1..255
     "uiAutoReturnAfter": 30000,
     "featureKeys": "0",
     "uiEncoderSpeed": 1,
-    "uiReverseEncoder": "0",
+    "uiReverseEncoder": "1",
     "uiKeyBouncetime": 10,
     "uiKeyFirstRepeat": 500,
     "uiKeyReduceRepeat": 50,
@@ -784,7 +784,7 @@ Values must be in range 1..255
     "bedDecoupleTestPeriod": 300,
     "caseLightPin": -1,
     "caseLightDefaultOn": "1",
-    "bedSkipIfWithin": 3,
+    "bedSkipIfWithin": 6,
     "gen1T0": 25,
     "gen1R0": 100000,
     "gen1Beta": 4036,
