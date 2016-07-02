@@ -1,3 +1,4 @@
+
 /*
     This file is part of Repetier-Firmware.
 
@@ -592,7 +593,7 @@ temperature*8.
 If you have a PTC thermistor instead of a NTC thermistor, keep the adc values increasing and use thermistor types 50-52 instead of 5-7!
 */
 /** Number of entries in the user thermistor table 0. Set to 0 to disable it. */
-#define NUM_TEMPS_USERTHERMISTOR0 28
+#define NUM_TEMPS_USERTHERMISTOR0 0
 #define USER_THERMISTORTABLE0  {\
   {1*4,864*8},{21*4,300*8},{25*4,290*8},{29*4,280*8},{33*4,270*8},{39*4,260*8},{46*4,250*8},{54*4,240*8},{64*4,230*8},{75*4,220*8},\
   {90*4,210*8},{107*4,200*8},{128*4,190*8},{154*4,180*8},{184*4,170*8},{221*4,160*8},{265*4,150*8},{316*4,140*8},{375*4,130*8},\
@@ -693,7 +694,7 @@ Value is used for all generic tables created. */
 
 #define HEATED_BED_MAX_TEMP 115
 /** Skip M190 wait, if heated bed is already within x degrees. Fixed numbers only, 0 = off. */
-#define SKIP_M190_IF_WITHIN 3
+#define SKIP_M190_IF_WITHIN 5
 
 // Select type of your heated bed. It's the same as for EXT0_TEMPSENSOR_TYPE
 // set to 0 if you don't have a heated bed
@@ -810,9 +811,9 @@ PRINTER_MODE_CNC 2
 use a mechanical endstop connected with GND. Set value to false for no pull-up
 on this endstop.
 */
-#define ENDSTOP_PULLUP_X_MIN false
-#define ENDSTOP_PULLUP_Y_MIN false
-#define ENDSTOP_PULLUP_Z_MIN false
+#define ENDSTOP_PULLUP_X_MIN true
+#define ENDSTOP_PULLUP_Y_MIN true
+#define ENDSTOP_PULLUP_Z_MIN true
 #define ENDSTOP_PULLUP_X_MAX true
 #define ENDSTOP_PULLUP_Y_MAX true
 #define ENDSTOP_PULLUP_Z_MAX false
@@ -829,10 +830,10 @@ on this endstop.
 
 #define MIN_HARDWARE_ENDSTOP_X true
 #define MIN_HARDWARE_ENDSTOP_Y true
-#define MIN_HARDWARE_ENDSTOP_Z false
+#define MIN_HARDWARE_ENDSTOP_Z true
 #define MAX_HARDWARE_ENDSTOP_X false
 #define MAX_HARDWARE_ENDSTOP_Y false
-#define MAX_HARDWARE_ENDSTOP_Z true
+#define MAX_HARDWARE_ENDSTOP_Z false
 
 //If your axes are only moving in one direction, make sure the endstops are connected properly.
 //If your axes move in one direction ONLY when the endstops are triggered, set ENDSTOPS_INVERTING to true here
@@ -867,7 +868,7 @@ on this endstop.
 // Sets direction of endstops when homing; 1=MAX, -1=MIN
 #define X_HOME_DIR -1
 #define Y_HOME_DIR -1
-#define Z_HOME_DIR 1
+#define Z_HOME_DIR -1
 
 // Delta robot radius endstop
 #define max_software_endstop_r true
@@ -1635,7 +1636,7 @@ The following settings override uiconfig.h!
 24 or CONTROLLER_ZONESTAR = Zonestar P802M with LCD 20x4 and 5 ADC button keypad
 */
 
-#define FEATURE_CONTROLLER NO_CONTROLLER
+#define FEATURE_CONTROLLER 11
 
 /* You can have one keypad connected via single analog pin as seen on
  some printers with Melzi V2.0 board, 20x4 LCD and 5 buttons keypad. This must be
@@ -1647,17 +1648,6 @@ Select the languages to use. On first startup user can select
 the language from a menu with activated languages. In Configuration->Language
 the language can be switched any time. */
 #define LANGUAGE_EN_ACTIVE 1 // English
-#define LANGUAGE_DE_ACTIVE 1 // German
-#define LANGUAGE_NL_ACTIVE 1 // Dutch
-#define LANGUAGE_PT_ACTIVE 1 // Brazilian Portuguese
-#define LANGUAGE_IT_ACTIVE 1 // Italian
-#define LANGUAGE_ES_ACTIVE 1 // Spanish
-#define LANGUAGE_FI_ACTIVE 1 // Finnish
-#define LANGUAGE_SE_ACTIVE 1 // Swedish
-#define LANGUAGE_FR_ACTIVE 1 // French
-#define LANGUAGE_CZ_ACTIVE 1 // Czech
-#define LANGUAGE_PL_ACTIVE 1 // Polish
-#define LANGUAGE_TR_ACTIVE 1 // Turkish
 
 /* Some displays loose their settings from time to time. Try uncommenting the
 auto-repair function if this is the case. It is not supported for all display
@@ -1667,8 +1657,8 @@ computations, so do not enable it if your display works stable!
 //#define TRY_AUTOREPAIR_LCD_ERRORS
 
 // This is line 2 of the status display at startup. Change to your like.
-#define UI_PRINTER_NAME "MyPrinter"
-#define UI_PRINTER_COMPANY "Self Made"
+#define UI_PRINTER_NAME "Matti3"
+#define UI_PRINTER_COMPANY "Matt"
 
 
 /** Animate switches between menus etc. */
